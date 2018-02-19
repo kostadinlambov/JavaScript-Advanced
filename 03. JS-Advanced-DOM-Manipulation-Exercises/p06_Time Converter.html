@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Time Converter</title>
+    <script src="timeConverter.js"></script>
+    <style>
+        label, input {
+            display: inline-block;
+            width: 5em;
+        }
+
+        label {
+            text-align: right;
+        }
+    </style>
+</head>
+<body onload="attachEventsListeners()">
+<h1>Time Converter</h1>
+<div>
+    <label for="days">Days: </label>
+    <input type="text" id="days">
+    <input id="daysBtn" type="button" value="Convert">
+</div>
+<div>
+    <label for="hours">Hours: </label>
+    <input type="text" id="hours">
+    <input id="hoursBtn" type="button" value="Convert">
+</div>
+<div>
+    <label for="minutes">Minutes: </label>
+    <input type="text" id="minutes">
+    <input id="minutesBtn" type="button" value="Convert">
+</div>
+<div>
+    <label for="seconds">Seconds: </label>
+    <input type="text" id="seconds">
+    <input id="secondsBtn" type="button" value="Convert">
+</div>
+
+<script>
+    function attachEventsListeners() {
+        let daysButton = document.getElementById('daysBtn');
+        let hoursButton = document.getElementById('hoursBtn');
+        let minutesButton = document.getElementById('minutesBtn');
+        let secondsButton = document.getElementById('secondsBtn');
+
+        let daysValue;
+        let hoursValue;
+        let minutesValue;
+        let secondsValue;
+
+        daysButton.addEventListener('click', convertTimeDays);
+        hoursButton.addEventListener('click', convertTimeHours);
+        minutesButton.addEventListener('click', convertTimeMinutes);
+        secondsButton.addEventListener('click', convertTimeSeconds);
+
+        function convertTimeDays() {
+            daysValue = Number(document.getElementById('days').value);
+            hoursValue = daysValue * 24;
+            minutesValue = hoursValue * 60;
+            secondsValue = minutesValue * 60;
+            changeValues(daysValue, hoursValue, minutesValue, secondsValue);
+        }
+
+        function convertTimeHours() {
+            hoursValue = Number(document.getElementById('hours').value);
+            minutesValue = hoursValue * 60;
+            daysValue = hoursValue / 24;
+            console.log(daysValue);
+            secondsValue = minutesValue * 60;
+            changeValues(daysValue, hoursValue, minutesValue, secondsValue);
+        }
+
+        function convertTimeMinutes() {
+            minutesValue = Number(document.getElementById('minutes').value);
+            hoursValue = minutesValue / 60;
+            daysValue = hoursValue / 24;
+            secondsValue = minutesValue * 60;
+            changeValues(daysValue, hoursValue, minutesValue, secondsValue);
+        }
+
+        function convertTimeSeconds() {
+            secondsValue = Number(document.getElementById('seconds').value);
+            minutesValue = secondsValue / 60;
+            hoursValue = minutesValue / 60;
+            daysValue = hoursValue / 24;
+            changeValues(daysValue, hoursValue, minutesValue, secondsValue);
+        }
+
+        function changeValues(daysValue, hoursValue, minutesValue, secondsValue) {
+            document.getElementById('days').value = daysValue;
+            document.getElementById('hours').value = Math.trunc(hoursValue);
+            document.getElementById('minutes').value = Math.trunc(minutesValue);
+            document.getElementById('seconds').value = Math.trunc(secondsValue);
+        }
+    }
+
+
+</script>
+</body>
+</html>
