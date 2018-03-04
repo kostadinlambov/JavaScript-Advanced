@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bug Tracker</title>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <style>
+        #wrapper {
+            width: 800px;
+            border: 1px solid black;
+        }
+
+        #titlebar {
+            background-color: beige;
+            font-size: 2em;
+            padding: 0.5em;
+        }
+
+        .report {
+            margin: 1em;
+            border: 1px solid black;
+            width: 400px;
+        }
+
+        .report .title {
+            background-color: cornflowerblue;
+            color: white;
+            padding: 0.25em;
+            position: relative;
+        }
+
+        .report .body p {
+            margin: 0.5em;
+        }
+
+        .report .title .status {
+            display: inline-block;
+            right: 0px;
+            position: absolute;
+            margin-right: 0.5em;
+        }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <div id="titlebar">Bug tracker</div>
+    <div id="content">
+        <div class="report">
+            <div class="body">
+                <p>Description</p>
+            </div>
+            <div class="title"><span class="author">Submitted by: Author</span><span class="status">Open | 5</span>
+            </div>
+        </div>
+        <div class="report">
+            <div class="body">
+                <p>Description</p>
+            </div>
+            <div class="title"><span class="author">Submitted by: Author</span><span class="status">Open | 5</span>
+            </div>
+        </div>
+        <div class="report">
+            <div class="body">
+                <p>Description</p>
+            </div>
+            <div class="title"><span class="author">Submitted by: Author</span><span class="status">Open | 5</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function solve() {
+        let bugs = []
+        let id = 0
+        function update() {
+            let element = $('#content')
+            element.empty()
+            for (let i = 0; i < bugs.length; i++) {
+                let a = $(`<div id="report_${bugs[i].ID}" class="report">`)
+                let b = $(`<div class="body">`)
+                let c = $(`<p>`)
+                c.text(bugs[i].description)
+                b.append(c)
+                a.append(b)
+                let d = $(`<div class="title">`)
+                let e = $(`<span class="author">`).text(bugs[i].author)
+                let f = $(`<span class="status">`).text(`${bugs[i].status} | ${bugs[i].severity}`)
+                d.append(e)
+                d.append(f)
+                a.append(d)
+                element.append(a)
+            }
+        }
+        return {
+            report:function (author,description,reproducible, severity) {
+                bugs.push({
+                    ID:id++,
+                    author:author,
+                    description:description,
+                    reproducible:reproducible,
+                    severity:severity,
+                    status:'Open'
+                })
+                bugs = bugs.sort((a, b) => a.ID - b.ID)
+                update()
+            },
+            setStatus:function (id,newStatus) {
+                for (let i = 0; i < bugs.length; i++) {
+                    if(bugs[i].ID == id){
+                        bugs[i].status = newStatus
+                    }
+                }
+                bugs = bugs.sort((a, b) => a.ID - b.ID)
+                update()
+            },
+            remove:function (id) {
+                let index
+                for (let i = 0; i < bugs.length; i++) {
+                    if(bugs[i].ID == id){
+                        index = i
+                    }
+                }
+                bugs.splice(index,1)
+                bugs = bugs.sort((a, b) => a.ID - b.ID)
+                update()
+            },
+            sort:function (method) {
+                if(method == 'author'){
+                    bugs.sort(function (a,b) {
+                        return a.author.localeCompare(b.author)
+                    })
+                } else if (method == 'severity' ) {
+                    bugs.sort(function (a,b) {
+                        return a.severity - b.severity
+                    })
+                } else {
+                    bugs.sort(function (a,b) {
+                        return a.ID - b.ID
+                    })
+                }
+                update()
+            },
+            output:function (selector) {
+                let element = $(selector)
+                for (let i = 0; i < bugs.length; i++) {
+                    let a = $(`<div id="report_${bugs[i].ID}">`)
+                    let b = $(`<div class="body">`)
+                    let c = $(`<p>`)
+                    p.text(bugs[i].description)
+                    b.append(c)
+                    a.append(b)
+                    let d = $(`<div class="title">`)
+                    let e = $(`<span class="author">Submited by: ${bugs[i].author}`)
+                    let f = $(`<span class="status">${bugs[i].status} | ${bugs[i].severity}`)
+                    d.append(e)
+                    d.append(f)
+                    a.append(d)
+                    element.append(a)
+                }
+            }
+        }
+    }
+    let tracker = solve();
+    tracker.output('#content');
+    tracker.report('guy', 'report content', true, 5);
+    tracker.report('second guy', 'report content 2', true, 3);
+    tracker.report('abv', 'report content three', true, 4);
+    tracker.remove(1);
+    let reports = $('.report');
+
+
+</script>
+
+
+</body>
+</html>
